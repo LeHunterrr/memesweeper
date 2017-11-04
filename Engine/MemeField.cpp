@@ -88,6 +88,9 @@ void MemeField::Draw( Graphics & gfx ) const{
 
 void MemeField::RevealTile( const Vei2 & ScreenPos ) {
 	TileAt( ScreenToGrid( ScreenPos ) ).Reveal();
+	if( TileAt( ScreenToGrid( ScreenPos ) ).HasMeme() ) {
+		isFucked = true;
+	}
 }
 
 void MemeField::ToggleFlag( const Vei2 & ScreenPos ) {
