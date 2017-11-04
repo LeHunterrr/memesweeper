@@ -26,7 +26,7 @@ Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
 	gfx( wnd ),
-	field( 5 )
+	field( 10 )
 {
 }
 
@@ -61,5 +61,7 @@ void Game::UpdateModel()
 
 void Game::ComposeFrame()
 {
-	field.Draw( gfx );
+	if( field.GetGameState() == MemeField::GameState::Going ) {
+		field.Draw( gfx );
+	}
 }
