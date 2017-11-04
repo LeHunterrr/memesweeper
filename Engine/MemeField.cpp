@@ -10,11 +10,51 @@ void MemeField::Tile::SetMeme( bool toSet ) {
 void MemeField::Tile::Draw(const Vei2& screenPos, Graphics & gfx ) const {
 	assert( screenPos.x >= 0 && screenPos.x < Graphics::ScreenWidth &&
 			screenPos.y >= 0 && screenPos.y < Graphics::ScreenHeight );
+	switch( state ) {
+		case Revealed:
+			if( !HasMeme() ) {
+				SpriteCodex::DrawTile0( screenPos, gfx );
+			} else {
+				SpriteCodex::DrawTileBomb(screenPos, gfx);
+			}
+			break;
+		case Flagged:
+			SpriteCodex::DrawTileFlag( screenPos, gfx );
+		case Hidden:
+			SpriteCodex::DrawTileButton( screenPos, gfx );
+			break;
+			
+	}
 	SpriteCodex::DrawTile0( screenPos, gfx );
 }
 
+void MemeField::Tile::Reveal() {
+	if( state != Flagged ) {
+		state = Revealed;
+	}
+}
+
+void MemeField::Tile::ToggleFlag() {
+	if( !IsRevealed() ) {
+		if( state == Flagged ) {
+			state == Hidden;
+		} else {
+			state == Flagged;
+		}
+	}
+}
+
+
 bool MemeField::Tile::HasMeme() const {
 	return hasMeme;
+}
+
+bool MemeField::Tile::IsRevealed() const {
+	return state == Revealed;
+}
+
+bool MemeField::Tile::IsFlagged() const {
+	return state == Flagged;
 }
 
 MemeField::MemeField( int numMemes ) {
@@ -46,15 +86,23 @@ void MemeField::Draw( Graphics & gfx ) const{
 	}
 }
 
+void MemeField::RevealTile( const Vei2 & ScreenPos ) {
+	TileAt( ScreenPos / SpriteCodex::tileSize ).Reveal();
+}
+
+void MemeField::ToggleFlag( const Vei2 & ScreenPos ) {
+	TileAt( ScreenPos / SpriteCodex::tileSize ).ToggleFlag();
+}
+
 RectI MemeField::GetField() const {
 	return BackgroundField;
 }
 
-const MemeField::Tile & MemeField::TileAt( const Vei2 pos ) const {
+const MemeField::Tile & MemeField::TileAt( const Vei2& pos ) const {
 	return field[ pos.x + pos.y * Height ];
 }
 
-MemeField::Tile & MemeField::TileAt( const Vei2 pos ) {
+MemeField::Tile & MemeField::TileAt( const Vei2& pos ) {
 	return field[ pos.x + pos.y * Height ];
 }
 

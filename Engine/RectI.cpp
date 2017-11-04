@@ -48,3 +48,7 @@ Vei2 RectI::GetCenter() const
 {
 	return Vei2( (left + right) / 2,(top + bottom) / 2 );
 }
+
+bool RectI::IsInside( const Vei2 & pos ) const {
+	return pos.x >= left && pos.x <= right && pos.y >= top && pos.y <= bottom;
+}

@@ -19,6 +19,7 @@
  *	along with The Chili DirectX Framework.  If not, see <http://www.gnu.org/licenses/>.  *
  ******************************************************************************************/
 #include "MainWindow.h"
+#include "SpriteCodex.h"
 #include "Game.h"
 
 Game::Game( MainWindow& wnd )
@@ -39,6 +40,21 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
+	while( !wnd.mouse.IsEmpty() ) {
+		const auto e = wnd.mouse.Read(); 
+		if( e.GetType() == Mouse::Event::Type::LPress ) {
+			Vei2 pos = wnd.mouse.GetPos();
+			if( field.GetField().IsInside( pos ) ) {
+				field.RevealTile( pos );
+			}
+		} else 
+		if( e.GetType() == Mouse::Event::Type::RPress ) {
+			Vei2 pos = wnd.mouse.GetPos();
+			if( field.GetField().IsInside( pos ) ) {
+				field.ToggleFlag( pos );
+			}
+		}
+	}
 }
 
 void Game::ComposeFrame()
