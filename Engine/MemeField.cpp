@@ -150,8 +150,8 @@ void MemeField::DrawField( const RectI & rect, Graphics & gfx ) const {
 void MemeField::SetNeighbourMemes( const Vei2 & pos ) {
 	int xStart = std::max( 0, pos.x - 1 );
 	int yStart = std::max( 0, pos.y - 1 );
-	int xEnd = std::min( Width, pos.x + 1 );
-	int yEnd = std::min( Height, pos.y + 1 );
+	int xEnd = std::min( Width - 1, pos.x + 1 );
+	int yEnd = std::min( Height - 1, pos.y + 1 );
 
 	int memesFound = 0;
 
@@ -162,9 +162,6 @@ void MemeField::SetNeighbourMemes( const Vei2 & pos ) {
 			}
 		}
 	}
-//	if( TileAt( pos ).HasMeme() ) {
-//		memesFound--;
-//	}
 	TileAt( pos ).numNeighbourMemes = memesFound;
 }
 
@@ -178,8 +175,8 @@ void MemeField::SetNeighbourMemes( int index ) {
 void MemeField::Recrusion( const Vei2 & start ) {
 	int xStart = std::max( 0, start.x - 1 );
 	int yStart = std::max( 0, start.y - 1 );
-	int xEnd = std::min( Width, start.x + 1 );
-	int yEnd = std::min( Height, start.y + 1 );
+	int xEnd = std::min( Width - 1, start.x + 1 );
+	int yEnd = std::min( Height - 1, start.y + 1 );
 
 	for( int y = yStart; y <= yEnd; y++ ) {
 		for( int x = xStart; x <= xEnd; x++ ) {
