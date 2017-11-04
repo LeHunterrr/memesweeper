@@ -13,7 +13,7 @@ public:
 private:
 	class Tile {
 	public:
-		enum State {
+		static enum State {
 			Hidden,
 			Flagged,
 			Revealed
@@ -37,7 +37,7 @@ public:
 	void Draw( Graphics& gfx ) const;
 	void RevealTile( const Vei2& ScreenPos );
 	void ToggleFlag( const Vei2& ScreenPos );
-	void CheckForWin() const;
+	void CheckForWin();
 	RectI GetField() const;
 	bool GetGameState() const;
 private:

@@ -161,10 +161,30 @@ void MemeField::RevealTile( const Vei2 & ScreenPos ) {
 	} else {
 		Recrusion( pos );
 	}
+	CheckForWin();
 }
 
 void MemeField::ToggleFlag( const Vei2 & ScreenPos ) {
 	TileAt( ScreenToGrid( ScreenPos ) ).ToggleFlag();
+	CheckForWin();
+}
+
+void MemeField::CheckForWin() {
+	bool won = true;
+	for( int y = 0; y < Height; y++ ) {
+		for( int x = 0; x < Width; x++ ) {
+			Vei2 pos = { x, y };
+			Tile t = TileAt( pos );
+			if( !t.IsRevealed() ) {
+				if( !( t.HasMeme() && t.IsFlagged() ) ) {
+					won = false;
+				}
+			}
+		}
+	}
+	if( won ) {
+		gamestate = Won;
+	}
 }
 
 RectI MemeField::GetField() const {
