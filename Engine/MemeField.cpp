@@ -13,10 +13,29 @@ void MemeField::Tile::Draw(const Vei2& screenPos, Graphics & gfx ) const {
 			screenPos.y >= 0 && screenPos.y < Graphics::ScreenHeight );
 	switch( state ) {
 		case Revealed:
-			if( !HasMeme() ) {
-				SpriteCodex::DrawTile0( screenPos, gfx );
+			if( HasMeme() ) {
+				SpriteCodex::DrawTileBomb( screenPos, gfx );
 			} else {
-				SpriteCodex::DrawTileBomb(screenPos, gfx);
+				switch( numNeighbourMemes ) {
+					case 0: SpriteCodex::DrawTile0( screenPos, gfx );
+						break;
+					case 1: SpriteCodex::DrawTile1( screenPos, gfx );
+						break;
+					case 2: SpriteCodex::DrawTile2( screenPos, gfx );
+						break;
+					case 3: SpriteCodex::DrawTile3( screenPos, gfx );
+						break;
+					case 4: SpriteCodex::DrawTile4( screenPos, gfx );
+						break;
+					case 5: SpriteCodex::DrawTile5( screenPos, gfx );
+						break;
+					case 6: SpriteCodex::DrawTile6( screenPos, gfx );
+						break;
+					case 7: SpriteCodex::DrawTile7( screenPos, gfx );
+						break;
+					case 8: SpriteCodex::DrawTile8( screenPos, gfx );
+						break;
+				}
 			}
 			break;
 		case Flagged:
@@ -161,8 +180,7 @@ void MemeField::Recrusion( const Vei2 & start ) {
 	for( int y = yStart; y <= yEnd; y++ ) {
 		for( int x = xStart; x <= xEnd; x++ ) {
 			Tile& tile = TileAt( { x, y } );
-			if( tile.numNeighbourMemes == 0 && !tile.IsRevealed() 
-				&& !tile.IsFlagged() && !tile.HasMeme()){
+			if( !tile.IsRevealed() && !tile.IsFlagged() && !tile.HasMeme() ) {
 				tile.Reveal();
 				Recrusion( { x, y } );
 			}
