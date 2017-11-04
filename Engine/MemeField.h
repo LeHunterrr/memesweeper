@@ -27,11 +27,12 @@ private:
 		bool hasMeme = false;
 	};
 public:
-	MemeField( int numMemes, bool& isFucked );
+	MemeField( int numMemes );
 	void Draw( Graphics& gfx ) const;
 	void RevealTile( const Vei2& ScreenPos );
 	void ToggleFlag( const Vei2& ScreenPos );
 	RectI GetField() const;
+	bool GetFucked() const;
 private:
 	void PlaceMeme( const Vei2& pos );
 	void DrawField( const RectI& rect, Graphics& gfx ) const;
@@ -46,5 +47,5 @@ private:
 	static constexpr int Width = 20;
 	static constexpr int Height = 20;
 	Tile field[ Width * Height ];
-	bool& isFucked;
+	bool isFucked = false;
 };

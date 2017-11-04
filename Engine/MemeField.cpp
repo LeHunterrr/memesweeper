@@ -76,7 +76,7 @@ bool MemeField::Tile::IsFlagged() const {
 	return state == Flagged;
 }
 
-MemeField::MemeField( int numMemes, bool& fucked ) : isFucked(fucked) {
+MemeField::MemeField( int numMemes ) {
 	assert( numMemes > 0 && numMemes < Width * Height );
 
 	std::random_device rd;
@@ -127,6 +127,10 @@ RectI MemeField::GetField() const {
 	return BackgroundField;
 }
 
+bool MemeField::GetFucked() const {
+	return isFucked;
+}
+
 const MemeField::Tile & MemeField::TileAt( const Vei2& pos ) const {
 	return field[ pos.x + pos.y * Height ];
 }
@@ -158,9 +162,9 @@ void MemeField::SetNeighbourMemes( const Vei2 & pos ) {
 			}
 		}
 	}
-	if( TileAt( pos ).HasMeme() ) {
-		memesFound--;
-	}
+//	if( TileAt( pos ).HasMeme() ) {
+//		memesFound--;
+//	}
 	TileAt( pos ).numNeighbourMemes = memesFound;
 }
 
