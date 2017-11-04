@@ -45,7 +45,6 @@ void MemeField::Tile::ToggleFlag() {
 	}
 }
 
-
 bool MemeField::Tile::HasMeme() const {
 	return hasMeme;
 }
@@ -92,9 +91,12 @@ void MemeField::Draw( Graphics & gfx ) const{
 }
 
 void MemeField::RevealTile( const Vei2 & ScreenPos ) {
-	TileAt( ScreenToGrid( ScreenPos ) ).Reveal();
-	if( TileAt( ScreenToGrid( ScreenPos ) ).HasMeme() ) {
+	Vei2 pos = ScreenToGrid( ScreenPos );
+	TileAt( pos ).Reveal();
+	if( TileAt( pos ).HasMeme() ) {
 		isFucked = true;
+	} else {
+		Recrusion( pos );
 	}
 }
 
@@ -126,7 +128,7 @@ void MemeField::SetNeighbourMemes( const Vei2 & pos ) {
 	int xStart = std::max( 0, pos.x - 1 );
 	int yStart = std::max( 0, pos.y - 1 );
 	int xEnd = std::min( Width, pos.x + 1 );
-	int yEnd = std::min( Height, pos.y - 1 );
+	int yEnd = std::min( Height, pos.y + 1 );
 
 	int memesFound = 0;
 
@@ -148,6 +150,24 @@ void MemeField::SetNeighbourMemes( int index ) {
 	index -= index % Width;
 	int y = index / Width;
 	SetNeighbourMemes( { x, y } );
+}
+
+void MemeField::Recrusion( const Vei2 & start ) {
+	int xStart = std::max( 0, start.x - 1 );
+	int yStart = std::max( 0, start.y - 1 );
+	int xEnd = std::min( Width, start.x + 1 );
+	int yEnd = std::min( Height, start.y + 1 );
+
+	for( int y = yStart; y <= yEnd; y++ ) {
+		for( int x = xStart; x <= xEnd; x++ ) {
+			Tile& tile = TileAt( { x, y } );
+			if( tile.numNeighbourMemes == 0 && !tile.IsRevealed() 
+				&& !tile.IsFlagged() && !tile.HasMeme()){
+				tile.Reveal();
+				Recrusion( { x, y } );
+			}
+		}
+	}
 }
 
 void MemeField::PlaceMeme( const Vei2 & pos ) {
