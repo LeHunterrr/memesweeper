@@ -51,8 +51,8 @@ private:
 	Vei2 ScreenToGrid( const Vei2& ScreenPos ) const;
 private:
 	RectI BackgroundField;
-	static constexpr int Width = 30;
-	static constexpr int Height = 30;
+	static constexpr int Width = 8;
+	static constexpr int Height = 8;
 	Tile field[ Width * Height ];
 	GameState gamestate = Going;
 };
