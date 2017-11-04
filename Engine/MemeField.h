@@ -1,5 +1,6 @@
 #pragma once
 #include "Vei2.h"
+#include "Graphics.h"
 
 class MemeField {
 private:
@@ -12,6 +13,7 @@ private:
 		};
 	public:
 		void SetMeme( bool toSet );
+		void Draw( Vei2 screenPos, Graphics& gfx );
 		bool HasMeme() const;
 	private:
 		State state = Hidden;
@@ -19,6 +21,7 @@ private:
 	};
 public:
 	MemeField( int numMemes );
+	void Draw( Graphics& gfx );
 private:
 	static constexpr int Width = 20;
 	static constexpr int Height = 20;

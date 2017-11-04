@@ -1,9 +1,16 @@
 #include "MemeField.h"
+#include "SpriteCodex.h"
 #include <random>
 #include <assert.h>
 
 void MemeField::Tile::SetMeme( bool toSet ) {
 	hasMeme = toSet;
+}
+
+void MemeField::Tile::Draw( Vei2 screenPos, Graphics & gfx ) {
+	assert( screenPos.x >= 0 && screenPos.x < Graphics::ScreenWidth &&
+			screenPos.y >= 0 && screenPos.y < Graphics::ScreenHeight );
+	SpriteCodex::DrawTile0( screenPos, gfx );
 }
 
 bool MemeField::Tile::HasMeme() const {
@@ -25,6 +32,14 @@ MemeField::MemeField( int numMemes ) {
 			pos.y = yDist( RNG );
 		} while( TileAt(pos).HasMeme() );
 		TileAt( pos ).SetMeme( true );
+	}
+}
+
+void MemeField::Draw( Graphics & gfx ) {
+	for( Vei2 pos = { 0,0 }; pos.y < Height; pos.y ++ ) {
+		for(pos.x = 0 ; pos.x < Width; pos.x++ ) {
+			TileAt( pos ).Draw( pos * SpriteCodex::tileSize, gfx );
+		}
 	}
 }
 
