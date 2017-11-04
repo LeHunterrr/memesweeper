@@ -14,7 +14,7 @@ private:
 		};
 	public:
 		void SetMeme( bool toSet );
-		void Draw( const Vei2& screenPos, Graphics& gfx ) const;
+		void Draw( const Vei2& screenPos, Graphics& gfx, bool isFucked ) const;
 		void Reveal();
 		void ToggleFlag();
 		bool HasMeme() const;
@@ -45,7 +45,7 @@ private:
 private:
 	RectI BackgroundField;
 	static constexpr int Width = 20;
-	static constexpr int Height = 20;
+	static constexpr int Height = 10;
 	Tile field[ Width * Height ];
 	bool isFucked = false;
 };
