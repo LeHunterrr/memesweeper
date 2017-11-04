@@ -7,7 +7,7 @@ void MemeField::Tile::SetMeme( bool toSet ) {
 	hasMeme = toSet;
 }
 
-void MemeField::Tile::Draw( Vei2 screenPos, Graphics & gfx ) {
+void MemeField::Tile::Draw(const Vei2& screenPos, Graphics & gfx ) const {
 	assert( screenPos.x >= 0 && screenPos.x < Graphics::ScreenWidth &&
 			screenPos.y >= 0 && screenPos.y < Graphics::ScreenHeight );
 	SpriteCodex::DrawTile0( screenPos, gfx );
@@ -33,14 +33,21 @@ MemeField::MemeField( int numMemes ) {
 		} while( TileAt(pos).HasMeme() );
 		TileAt( pos ).SetMeme( true );
 	}
+	BackgroundField = RectI( 0, Width * SpriteCodex::tileSize, 0, Height * SpriteCodex::tileSize );
 }
 
-void MemeField::Draw( Graphics & gfx ) {
+void MemeField::Draw( Graphics & gfx ) const{
+	DrawField( BackgroundField, gfx );
+
 	for( Vei2 pos = { 0,0 }; pos.y < Height; pos.y ++ ) {
 		for(pos.x = 0 ; pos.x < Width; pos.x++ ) {
 			TileAt( pos ).Draw( pos * SpriteCodex::tileSize, gfx );
 		}
 	}
+}
+
+RectI MemeField::GetField() const {
+	return BackgroundField;
 }
 
 const MemeField::Tile & MemeField::TileAt( const Vei2 pos ) const {
@@ -49,6 +56,10 @@ const MemeField::Tile & MemeField::TileAt( const Vei2 pos ) const {
 
 MemeField::Tile & MemeField::TileAt( const Vei2 pos ) {
 	return field[ pos.x + pos.y * Height ];
+}
+
+void MemeField::DrawField( const RectI & rect, Graphics & gfx ) const {
+	gfx.DrawRect( rect, SpriteCodex::baseColor );
 }
 
 void MemeField::PlaceMine( const Vei2 & pos ) {
