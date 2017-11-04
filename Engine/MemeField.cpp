@@ -2,6 +2,7 @@
 #include "SpriteCodex.h"
 #include <random>
 #include <assert.h>
+#include <algorithm>
 
 void MemeField::Tile::SetMeme( bool toSet ) {
 	hasMeme = toSet;
@@ -74,6 +75,10 @@ MemeField::MemeField( int numMemes, bool& fucked ) : isFucked(fucked) {
 		TileAt( pos ).SetMeme( true );
 	}
 	BackgroundField = RectI( 0, Width * SpriteCodex::tileSize, 0, Height * SpriteCodex::tileSize );
+
+	for( int c = 0; c < Width * Height; c++ ) {
+		SetNeighbourMemes( c );
+	}
 }
 
 void MemeField::Draw( Graphics & gfx ) const{
@@ -115,6 +120,34 @@ Vei2 MemeField::ScreenToGrid( const Vei2 & ScreenPos ) const {
 
 void MemeField::DrawField( const RectI & rect, Graphics & gfx ) const {
 	gfx.DrawRect( rect, SpriteCodex::baseColor );
+}
+
+void MemeField::SetNeighbourMemes( const Vei2 & pos ) {
+	int xStart = std::max( 0, pos.x - 1 );
+	int yStart = std::max( 0, pos.y - 1 );
+	int xEnd = std::min( Width, pos.x + 1 );
+	int yEnd = std::min( Height, pos.y - 1 );
+
+	int memesFound = 0;
+
+	for( int y = yStart; y <= yEnd; y++ ) {
+		for( int x = xStart; x <= xEnd; x++ ) {
+			if( TileAt( { x, y } ).HasMeme() ) {
+				memesFound++;
+			}
+		}
+	}
+	if( TileAt( pos ).HasMeme() ) {
+		memesFound--;
+	}
+	TileAt( pos ).numNeighbourMemes = memesFound;
+}
+
+void MemeField::SetNeighbourMemes( int index ) {
+	int x = index % Width;
+	index -= index % Width;
+	int y = index / Width;
+	SetNeighbourMemes( { x, y } );
 }
 
 void MemeField::PlaceMeme( const Vei2 & pos ) {
