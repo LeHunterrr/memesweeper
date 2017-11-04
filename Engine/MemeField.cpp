@@ -176,8 +176,13 @@ void MemeField::CheckForWin() {
 			Vei2 pos = { x, y };
 			Tile t = TileAt( pos );
 			if( !t.IsRevealed() ) {
-				if( !( t.HasMeme() && t.IsFlagged() ) ) {
+				if(  t.HasMeme() && !t.IsFlagged()  ) {
 					won = false;
+					break;
+				}
+				if( !t.HasMeme() && t.IsFlagged() ) {
+					won = false;
+					break;
 				}
 			}
 		}
@@ -191,7 +196,7 @@ RectI MemeField::GetField() const {
 	return BackgroundField;
 }
 
-bool MemeField::GetGameState() const {
+MemeField::GameState MemeField::GetGameState() const {
 	return gamestate;
 }
 

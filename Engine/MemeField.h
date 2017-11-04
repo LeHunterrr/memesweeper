@@ -39,7 +39,7 @@ public:
 	void ToggleFlag( const Vei2& ScreenPos );
 	void CheckForWin();
 	RectI GetField() const;
-	bool GetGameState() const;
+	GameState GetGameState() const;
 private:
 	void PlaceMeme( const Vei2& pos );
 	void DrawField( const RectI& rect, Graphics& gfx ) const;
@@ -51,8 +51,8 @@ private:
 	Vei2 ScreenToGrid( const Vei2& ScreenPos ) const;
 private:
 	RectI BackgroundField;
-	static constexpr int Width = 20;
-	static constexpr int Height = 10;
+	static constexpr int Width = 30;
+	static constexpr int Height = 30;
 	Tile field[ Width * Height ];
 	GameState gamestate = Going;
 };
