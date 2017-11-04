@@ -44,5 +44,6 @@ private:
 	/********************************/
 	/*  User Variables              */
 	MemeField field;
+	bool isFucked = false;;
 	/********************************/
 };
