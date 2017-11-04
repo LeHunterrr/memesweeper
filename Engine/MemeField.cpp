@@ -36,10 +36,10 @@ void MemeField::Tile::Reveal() {
 
 void MemeField::Tile::ToggleFlag() {
 	if( !IsRevealed() ) {
-		if( state == Flagged ) {
-			state == Hidden;
+		if( state == Hidden ) {
+			state = Flagged;
 		} else {
-			state == Flagged;
+			state = Hidden;
 		}
 	}
 }
@@ -87,11 +87,11 @@ void MemeField::Draw( Graphics & gfx ) const{
 }
 
 void MemeField::RevealTile( const Vei2 & ScreenPos ) {
-	TileAt( ScreenPos / SpriteCodex::tileSize ).Reveal();
+	TileAt( ScreenToGrid( ScreenPos ) ).Reveal();
 }
 
 void MemeField::ToggleFlag( const Vei2 & ScreenPos ) {
-	TileAt( ScreenPos / SpriteCodex::tileSize ).ToggleFlag();
+	TileAt( ScreenToGrid( ScreenPos ) ).ToggleFlag();
 }
 
 RectI MemeField::GetField() const {
@@ -106,10 +106,14 @@ MemeField::Tile & MemeField::TileAt( const Vei2& pos ) {
 	return field[ pos.x + pos.y * Height ];
 }
 
+Vei2 MemeField::ScreenToGrid( const Vei2 & ScreenPos ) const {
+	return ScreenPos / SpriteCodex::tileSize;
+}
+
 void MemeField::DrawField( const RectI & rect, Graphics & gfx ) const {
 	gfx.DrawRect( rect, SpriteCodex::baseColor );
 }
 
-void MemeField::PlaceMine( const Vei2 & pos ) {
+void MemeField::PlaceMeme( const Vei2 & pos ) {
 	field[ pos.x + pos.y * Width ].SetMeme( true );
 }

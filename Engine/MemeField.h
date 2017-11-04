@@ -31,10 +31,11 @@ public:
 	void ToggleFlag( const Vei2& ScreenPos );
 	RectI GetField() const;
 private:
-	void PlaceMine( const Vei2& pos );
+	void PlaceMeme( const Vei2& pos );
 	void DrawField( const RectI& rect, Graphics& gfx ) const;
 	const Tile& TileAt( const Vei2& pos ) const;
 	Tile& TileAt( const Vei2& pos );
+	Vei2 ScreenToGrid( const Vei2& ScreenPos ) const;
 private:
 	RectI BackgroundField;
 	static constexpr int Width = 20;
