@@ -8,11 +8,11 @@ void MemeField::Tile::SetMeme( bool toSet ) {
 	hasMeme = toSet;
 }
 
-void MemeField::Tile::Draw(const Vei2& screenPos, Graphics & gfx, bool isFucked ) const {
+void MemeField::Tile::Draw(const Vei2& screenPos, Graphics & gfx, GameState isFucked ) const {
 	assert( screenPos.x >= 0 && screenPos.x < Graphics::ScreenWidth &&
 			screenPos.y >= 0 && screenPos.y < Graphics::ScreenHeight );
 
-	if( !isFucked ) {
+	if( isFucked != IsFucked ) {
 		switch( state ) {
 			case Revealed:
 				if( HasMeme() ) {
@@ -148,7 +148,7 @@ void MemeField::Draw( Graphics & gfx ) const{
 
 	for( Vei2 pos = { 0,0 }; pos.y < Height; pos.y ++ ) {
 		for(pos.x = 0 ; pos.x < Width; pos.x++ ) {
-			TileAt( pos ).Draw( pos * SpriteCodex::tileSize, gfx, isFucked );
+			TileAt( pos ).Draw( pos * SpriteCodex::tileSize, gfx, gamestate );
 		}
 	}
 }
@@ -157,7 +157,7 @@ void MemeField::RevealTile( const Vei2 & ScreenPos ) {
 	Vei2 pos = ScreenToGrid( ScreenPos );
 	TileAt( pos ).Reveal();
 	if( TileAt( pos ).HasMeme() ) {
-		isFucked = true;
+		gamestate = IsFucked;
 	} else {
 		Recrusion( pos );
 	}
@@ -171,8 +171,8 @@ RectI MemeField::GetField() const {
 	return BackgroundField;
 }
 
-bool MemeField::GetFucked() const {
-	return isFucked;
+bool MemeField::GetGameState() const {
+	return gamestate;
 }
 
 const MemeField::Tile & MemeField::TileAt( const Vei2& pos ) const {

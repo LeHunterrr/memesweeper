@@ -4,6 +4,12 @@
 #include "RectI.h"
 
 class MemeField {
+public:
+	enum GameState {
+		IsFucked,
+		Going,
+		Won
+	};
 private:
 	class Tile {
 	public:
@@ -14,7 +20,7 @@ private:
 		};
 	public:
 		void SetMeme( bool toSet );
-		void Draw( const Vei2& screenPos, Graphics& gfx, bool isFucked ) const;
+		void Draw( const Vei2& screenPos, Graphics& gfx, GameState isFucked ) const;
 		void Reveal();
 		void ToggleFlag();
 		bool HasMeme() const;
@@ -31,8 +37,9 @@ public:
 	void Draw( Graphics& gfx ) const;
 	void RevealTile( const Vei2& ScreenPos );
 	void ToggleFlag( const Vei2& ScreenPos );
+	void CheckForWin() const;
 	RectI GetField() const;
-	bool GetFucked() const;
+	bool GetGameState() const;
 private:
 	void PlaceMeme( const Vei2& pos );
 	void DrawField( const RectI& rect, Graphics& gfx ) const;
@@ -47,5 +54,5 @@ private:
 	static constexpr int Width = 20;
 	static constexpr int Height = 10;
 	Tile field[ Width * Height ];
-	bool isFucked = false;
+	GameState gamestate = Going;
 };

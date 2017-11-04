@@ -40,19 +40,21 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
-	while( !wnd.mouse.IsEmpty() ) {
-		const auto e = wnd.mouse.Read(); 
-		if( e.GetType() == Mouse::Event::Type::LPress ) {
-			Vei2 pos = wnd.mouse.GetPos();
-			if( field.GetField().IsInside( pos ) ) {
-				field.RevealTile( pos );
-			}
-		} else 
-		if( e.GetType() == Mouse::Event::Type::RPress ) {
-			Vei2 pos = wnd.mouse.GetPos();
-			if( field.GetField().IsInside( pos ) ) {
-				field.ToggleFlag( pos );
-			}
+	if( field.GetGameState() == MemeField::GameState::Going ) {
+		while( !wnd.mouse.IsEmpty() ) {
+			const auto e = wnd.mouse.Read();
+			if( e.GetType() == Mouse::Event::Type::LPress ) {
+				Vei2 pos = wnd.mouse.GetPos();
+				if( field.GetField().IsInside( pos ) ) {
+					field.RevealTile( pos );
+				}
+			} else
+				if( e.GetType() == Mouse::Event::Type::RPress ) {
+					Vei2 pos = wnd.mouse.GetPos();
+					if( field.GetField().IsInside( pos ) ) {
+						field.ToggleFlag( pos );
+					}
+				}
 		}
 	}
 }
