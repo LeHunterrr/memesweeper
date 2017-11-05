@@ -61,7 +61,5 @@ void Game::UpdateModel()
 
 void Game::ComposeFrame()
 {
-	if( field.GetGameState() == MemeField::GameState::Going ) {
-		field.Draw( gfx );
-	}
+	field.Draw( gfx );
 }
