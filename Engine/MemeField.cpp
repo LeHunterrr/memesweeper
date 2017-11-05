@@ -205,11 +205,11 @@ MemeField::GameState MemeField::GetGameState() const {
 }
 
 const MemeField::Tile & MemeField::TileAt( const Vei2& pos ) const {
-	return field[ pos.x + pos.y * Height ];
+	return field[ pos.x + pos.y * Width ];
 }
 
 MemeField::Tile & MemeField::TileAt( const Vei2& pos ) {
-	return field[ pos.x + pos.y * Height ];
+	return field[ pos.x + pos.y * Width ];
 }
 
 Vei2 MemeField::ScreenToGrid( const Vei2 & ScreenPos ) const {

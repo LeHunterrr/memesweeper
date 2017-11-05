@@ -7,9 +7,9 @@
 class MemeField {
 public:
 	enum GameState {
-		IsFucked,
-		Going,
-		Won
+		IsFucked = 0,
+		Going = 1,
+		Won = 2
 	};
 private:
 	class Tile {
