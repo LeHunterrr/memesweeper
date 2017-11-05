@@ -1,5 +1,4 @@
 #include "MemeField.h"
-#include "SpriteCodex.h"
 #include <random>
 #include <assert.h>
 #include <algorithm>
@@ -136,7 +135,11 @@ MemeField::MemeField( int numMemes ) {
 		} while( TileAt( pos ).HasMeme() );
 		TileAt( pos ).SetMeme( true );
 	}
-	BackgroundField = RectI( 0, Width * SpriteCodex::tileSize, 0, Height * SpriteCodex::tileSize );
+	const int tileSize = SpriteCodex::tileSize;
+	BackgroundField = RectI( OffsetX * tileSize, OffsetX * tileSize + Width * tileSize,
+							 OffsetY * tileSize, OffsetY * tileSize + Height * tileSize );
+	Border = RectI( (OffsetX - BorderThiccness) * tileSize, (OffsetX + BorderThiccness + Width) * tileSize,
+					(OffsetY - BorderThiccness) * tileSize, (OffsetY + BorderThiccness + Height)* tileSize );
 
 	for( int c = 0; c < Width * Height; c++ ) {
 		SetNeighbourMemes( c );
@@ -144,11 +147,12 @@ MemeField::MemeField( int numMemes ) {
 }
 
 void MemeField::Draw( Graphics & gfx ) const{
+	gfx.DrawRect( Border, Colors::Blue );
 	DrawField( BackgroundField, gfx );
-
 	for( Vei2 pos = { 0,0 }; pos.y < Height; pos.y ++ ) {
 		for(pos.x = 0 ; pos.x < Width; pos.x++ ) {
-			TileAt( pos ).Draw( pos * SpriteCodex::tileSize, gfx, gamestate );
+			Vei2 drawPosition = { pos.x + OffsetX, pos.y + OffsetY };
+			TileAt( pos ).Draw( drawPosition * SpriteCodex::tileSize, gfx, gamestate );
 		}
 	}
 }
@@ -209,7 +213,10 @@ MemeField::Tile & MemeField::TileAt( const Vei2& pos ) {
 }
 
 Vei2 MemeField::ScreenToGrid( const Vei2 & ScreenPos ) const {
-	return ScreenPos / SpriteCodex::tileSize;
+	Vei2 copy = ScreenPos;
+	copy.x -= OffsetX * SpriteCodex::tileSize;
+	copy.y -= OffsetY * SpriteCodex::tileSize;
+	return copy / SpriteCodex::tileSize;
 }
 
 void MemeField::DrawField( const RectI & rect, Graphics & gfx ) const {
