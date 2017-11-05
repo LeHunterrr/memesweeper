@@ -62,4 +62,7 @@ void Game::UpdateModel()
 void Game::ComposeFrame()
 {
 	field.Draw( gfx );
+	if( field.GetGameState() == MemeField::GameState::Won ) {
+		SpriteCodex::DrawWin( { Graphics::ScreenWidth / 2, Graphics::ScreenHeight / 2 }, gfx );
+	}
 }
