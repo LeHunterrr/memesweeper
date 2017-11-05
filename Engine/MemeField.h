@@ -53,8 +53,8 @@ private:
 private:
 	RectI BackgroundField;
 	RectI Border;
-	static constexpr int Width = 8;
-	static constexpr int Height = 8;
+	static constexpr int Width = 4;
+	static constexpr int Height = 2;
 	static constexpr int OffsetX = ( Graphics::ScreenWidth / ( 2 * SpriteCodex::tileSize ) ) - ( Width / 2 );
 	static constexpr int OffsetY = ( Graphics::ScreenHeight / ( 2 * SpriteCodex::tileSize ) ) - ( Height / 2 );
 	static constexpr int BorderThiccness = 1;

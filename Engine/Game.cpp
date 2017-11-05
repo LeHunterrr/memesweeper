@@ -26,7 +26,8 @@ Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
 	gfx( wnd ),
-	field( 10 )
+	field( 2 ),
+	lose(L"lose.wav", false)
 {
 }
 
@@ -64,5 +65,9 @@ void Game::ComposeFrame()
 	field.Draw( gfx );
 	if( field.GetGameState() == MemeField::GameState::Won ) {
 		SpriteCodex::DrawWin( { Graphics::ScreenWidth / 2, Graphics::ScreenHeight / 2 }, gfx );
+	}
+	if( field.GetGameState() == MemeField::GameState::IsFucked && !hasPlayed) {
+		lose.Play();
+		hasPlayed = true;
 	}
 }
