@@ -11,84 +11,51 @@ void MemeField::Tile::Draw(const Vei2& screenPos, Graphics & gfx, GameState isFu
 	assert( screenPos.x >= 0 && screenPos.x < Graphics::ScreenWidth &&
 			screenPos.y >= 0 && screenPos.y < Graphics::ScreenHeight );
 
-	if( isFucked != IsFucked ) {
-		switch( state ) {
-			case Revealed:
-				if( HasMeme() ) {
-					SpriteCodex::DrawTileBomb( screenPos, gfx );
-				} else {
-					switch( numNeighbourMemes ) {
-						case 0: SpriteCodex::DrawTile0( screenPos, gfx );
-							break;
-						case 1: SpriteCodex::DrawTile1( screenPos, gfx );
-							break;
-						case 2: SpriteCodex::DrawTile2( screenPos, gfx );
-							break;
-						case 3: SpriteCodex::DrawTile3( screenPos, gfx );
-							break;
-						case 4: SpriteCodex::DrawTile4( screenPos, gfx );
-							break;
-						case 5: SpriteCodex::DrawTile5( screenPos, gfx );
-							break;
-						case 6: SpriteCodex::DrawTile6( screenPos, gfx );
-							break;
-						case 7: SpriteCodex::DrawTile7( screenPos, gfx );
-							break;
-						case 8: SpriteCodex::DrawTile8( screenPos, gfx );
-							break;
-					}
+	switch( state ) {
+		case Revealed:
+			if( HasMeme() ) {
+				SpriteCodex::DrawTileBomb( screenPos, gfx );
+			} else {
+				switch( numNeighbourMemes ) {
+					case 0: SpriteCodex::DrawTile0( screenPos, gfx );
+						break;
+					case 1: SpriteCodex::DrawTile1( screenPos, gfx );
+						break;
+					case 2: SpriteCodex::DrawTile2( screenPos, gfx );
+						break;
+					case 3: SpriteCodex::DrawTile3( screenPos, gfx );
+						break;
+					case 4: SpriteCodex::DrawTile4( screenPos, gfx );
+						break;
+					case 5: SpriteCodex::DrawTile5( screenPos, gfx );
+						break;
+					case 6: SpriteCodex::DrawTile6( screenPos, gfx );
+						break;
+					case 7: SpriteCodex::DrawTile7( screenPos, gfx );
+						break;
+					case 8: SpriteCodex::DrawTile8( screenPos, gfx );
+						break;
 				}
-				break;
-			case Flagged:
-				SpriteCodex::DrawTileFlag( screenPos, gfx );
-			case Hidden:
-				SpriteCodex::DrawTileButton( screenPos, gfx );
-				break;
-		}
-	} else {
-		switch( state ) {
-			case Revealed:
-				if( HasMeme() ) {
-					SpriteCodex::DrawTileBombRed( screenPos, gfx );
-				} else {
-					switch( numNeighbourMemes ) {
-						case 0: SpriteCodex::DrawTile0( screenPos, gfx );
-							break;
-						case 1: SpriteCodex::DrawTile1( screenPos, gfx );
-							break;
-						case 2: SpriteCodex::DrawTile2( screenPos, gfx );
-							break;
-						case 3: SpriteCodex::DrawTile3( screenPos, gfx );
-							break;
-						case 4: SpriteCodex::DrawTile4( screenPos, gfx );
-							break;
-						case 5: SpriteCodex::DrawTile5( screenPos, gfx );
-							break;
-						case 6: SpriteCodex::DrawTile6( screenPos, gfx );
-							break;
-						case 7: SpriteCodex::DrawTile7( screenPos, gfx );
-							break;
-						case 8: SpriteCodex::DrawTile8( screenPos, gfx );
-							break;
-					}
-				}
-				break;
-			case Flagged:
+			}
+			break;
+		case Flagged:
+			if( isFucked == IsFucked ) {
 				if( HasMeme() ) {
 					SpriteCodex::DrawTileFlag( screenPos, gfx );
 					SpriteCodex::DrawTileBomb( screenPos, gfx );
 				} else {
 					SpriteCodex::DrawTileCross( screenPos, gfx );
 				}
-			case Hidden:
-				if( HasMeme() ) {
-					SpriteCodex::DrawTileBomb(screenPos, gfx);
-				}
-				SpriteCodex::DrawTileButton( screenPos, gfx );
-				break;
-		}
+			} else {
+				SpriteCodex::DrawTileFlag( screenPos, gfx );
+			}
+		case Hidden:
+			if( HasMeme() && isFucked == IsFucked ) {
+				SpriteCodex::DrawTileBomb( screenPos, gfx );
+			}
+			SpriteCodex::DrawTileButton( screenPos, gfx );
+			break;
 	}
-	
 }
 
 void MemeField::Tile::Reveal() {
@@ -147,7 +114,7 @@ MemeField::MemeField( int numMemes ) {
 }
 
 void MemeField::Draw( Graphics & gfx ) const{
-	gfx.DrawRect( Border, Colors::Blue );
+	gfx.DrawRect( Border, Colors::Blue ); //change to Border to reduce putpixel calls
 	DrawField( BackgroundField, gfx );
 	for( Vei2 pos = { 0,0 }; pos.y < Height; pos.y ++ ) {
 		for(pos.x = 0 ; pos.x < Width; pos.x++ ) {
@@ -159,8 +126,9 @@ void MemeField::Draw( Graphics & gfx ) const{
 
 void MemeField::RevealTile( const Vei2 & ScreenPos ) {
 	Vei2 pos = ScreenToGrid( ScreenPos );
-	TileAt( pos ).Reveal();
-	if( TileAt( pos ).HasMeme() ) {
+	Tile& tile = TileAt( pos );
+	tile.Reveal();
+	if( tile.HasMeme() ) {
 		gamestate = IsFucked;
 	} else {
 		Recrusion( pos );
@@ -177,8 +145,7 @@ void MemeField::CheckForWin() {
 	bool won = true;
 	for( int y = 0; y < Height; y++ ) {
 		for( int x = 0; x < Width; x++ ) {
-			Vei2 pos = { x, y };
-			Tile t = TileAt( pos );
+			Tile t = TileAt( { x, y } );
 			if( !t.IsRevealed() ) {
 				if(  t.HasMeme() && !t.IsFlagged()  ) {
 					won = false;
