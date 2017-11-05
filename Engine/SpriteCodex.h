@@ -25,4 +25,8 @@ public:
 	static void DrawTileFlag( const Vei2& pos,Graphics& gfx );
 	static void DrawTileBomb( const Vei2& pos,Graphics& gfx );
 	static void DrawTileBombRed( const Vei2& pos,Graphics& gfx );
+	static void DrawWin( const Vei2& pos, Graphics& gfx );
+	static void DrawSmall( const Vei2& pos, Graphics& gfx );
+	static void DrawMedium( const Vei2& pos, Graphics& gfx );
+	static void DrawLarge( const Vei2 & pos, Graphics & gfx );
 };
