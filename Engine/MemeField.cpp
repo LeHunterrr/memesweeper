@@ -1,4 +1,5 @@
 #include "MemeField.h"
+#include "SpriteCodex.h"
 #include <random>
 #include <assert.h>
 #include <algorithm>
@@ -135,7 +136,7 @@ MemeField::MemeField( int numMemes ) {
 		} while( TileAt( pos ).HasMeme() );
 		TileAt( pos ).SetMeme( true );
 	}
-	BackgroundField = RectI( OffsetX * SpriteCodex::tileSize, Width * SpriteCodex::tileSize, OffsetY * SpriteCodex::tileSize, Height * SpriteCodex::tileSize );
+	BackgroundField = RectI( 0, Width * SpriteCodex::tileSize, 0, Height * SpriteCodex::tileSize );
 
 	for( int c = 0; c < Width * Height; c++ ) {
 		SetNeighbourMemes( c );
@@ -145,8 +146,8 @@ MemeField::MemeField( int numMemes ) {
 void MemeField::Draw( Graphics & gfx ) const{
 	DrawField( BackgroundField, gfx );
 
-	for( Vei2 pos = { OffsetX, OffsetY }; pos.y < Height; pos.y ++ ) {
-		for(pos.x = OffsetX ; pos.x < Width; pos.x++ ) {
+	for( Vei2 pos = { 0,0 }; pos.y < Height; pos.y ++ ) {
+		for(pos.x = 0 ; pos.x < Width; pos.x++ ) {
 			TileAt( pos ).Draw( pos * SpriteCodex::tileSize, gfx, gamestate );
 		}
 	}
