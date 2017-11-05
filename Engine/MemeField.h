@@ -2,6 +2,7 @@
 #include "Vei2.h"
 #include "Graphics.h"
 #include "RectI.h"
+#include "SpriteCodex.h"
 
 class MemeField {
 public:
@@ -51,8 +52,12 @@ private:
 	Vei2 ScreenToGrid( const Vei2& ScreenPos ) const;
 private:
 	RectI BackgroundField;
-	static constexpr int Width = 8;
-	static constexpr int Height = 8;
+	static constexpr int _width = 8;
+	static constexpr int _height = 8;
+	static constexpr int OffsetX = ( Graphics::ScreenWidth / ( 2 * SpriteCodex::tileSize ) ) - ( _width / 2 );
+	static constexpr int OffsetY = ( Graphics::ScreenHeight / ( 2 * SpriteCodex::tileSize ) ) - ( _height / 2 );
+	static constexpr int Width = _width + OffsetX;
+	static constexpr int Height = _height + OffsetY;
 	Tile field[ Width * Height ];
 	GameState gamestate = Going;
 };
